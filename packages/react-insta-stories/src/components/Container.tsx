@@ -4,6 +4,8 @@ import ProgressContext from './../context/Progress'
 import Story from './Story'
 import ProgressArray from './ProgressArray'
 import { GlobalCtx } from './../interfaces'
+// @ts-ignore
+import {useSwipeable} from "react-swipeable";
 
 export default function () {
     const [currentId, setCurrentId] = useState<number>(0)
@@ -13,7 +15,8 @@ export default function () {
 
     let mousedownId = useRef<NodeJS.Timeout>()
 
-    const { width, height, stories, loop, currentIndex, isPaused } = useContext<GlobalCtx>(GlobalContext)
+    const { width, height, stories, loop, currentIndex, isPaused, autoStoryChange } = useContext<GlobalCtx>(GlobalContext)
+    const {beforePrevStory, beforeNextStory} = useContext<GlobalCtx>(GlobalContext)
 
     useEffect(() => {
         if (typeof currentIndex === 'number') {
@@ -36,15 +39,24 @@ export default function () {
         setBufferAction(!!bufferAction)
     }
 
+    /**
+     * 'autoStoryChange' option can be used to disable auto story change (so this can bw handled by some outer element)
+     */
     const previous = () => {
-        setCurrentId(prev => prev > 0 ? prev - 1 : prev)
+        beforePrevStory && beforePrevStory();
+        if (autoStoryChange) {
+            setCurrentId(prev => prev > 0 ? prev - 1 : prev)
+        }
     }
 
     const next = () => {
-        if (loop) {
-            updateNextStoryIdForLoop()
-        } else {
-            updateNextStoryId()
+        beforeNextStory && beforeNextStory();
+        if (autoStoryChange) {
+            if (loop) {
+                updateNextStoryIdForLoop()
+            } else {
+                updateNextStoryId()
+            }
         }
     };
 
@@ -60,14 +72,14 @@ export default function () {
     }
 
     const debouncePause = (e: React.MouseEvent | React.TouchEvent) => {
-        e.preventDefault()
+        // e.preventDefault()
         mousedownId.current = setTimeout(() => {
             toggleState('pause')
         }, 200)
     }
 
     const mouseUp = (e: React.MouseEvent | React.TouchEvent, type: string) => {
-        e.preventDefault()
+        // e.preventDefault()
         mousedownId.current && clearTimeout(mousedownId.current)
         if (pause) {
             toggleState('play')
@@ -80,8 +92,17 @@ export default function () {
         setVideoDuration(duration * 1000)
     }
 
+    // Enable left/right swipes
+    const handlers = useSwipeable({ onSwiped: ({dir}) => {
+            if (dir === "Right") {
+                previous()
+            } else if (dir === "Left") {
+                next();
+            }
+        }});
+
     return (
-        <div style={{ ...styles.container, ...{ width, height } }}>
+        <div style={{ ...styles.container, ...{ width, height } }} {...handlers}>
             <ProgressContext.Provider value={{
                 bufferAction: bufferAction,
                 videoDuration: videoDuration,
@@ -99,8 +120,8 @@ export default function () {
                 getVideoDuration={getVideoDuration}
             />
             <div style={styles.overlay}>
-                <div style={{ width: '50%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'previous')} onMouseDown={debouncePause} onMouseUp={(e) => mouseUp(e, 'previous')} />
-                <div style={{ width: '50%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'next')} onMouseDown={debouncePause} onMouseUp={(e) => mouseUp(e, 'next')} />
+                <div style={{ width: '50%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'previous')} />
+                <div style={{ width: '50%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'next')} />
             </div>
         </div>
     )

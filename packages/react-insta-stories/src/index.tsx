@@ -31,7 +31,10 @@ const ReactInstaStories = function (props: ReactInstaStoriesProps) {
         currentIndex: props.currentIndex,
         onStoryStart: props.onStoryStart,
         onStoryEnd: props.onStoryEnd,
-        onAllStoriesEnd: props.onAllStoriesEnd
+        onAllStoriesEnd: props.onAllStoriesEnd,
+        beforePrevStory: props.beforePrevStory,
+        beforeNextStory: props.beforeNextStory,
+        autoStoryChange: props.autoStoryChange
     }
     return <GlobalContext.Provider value={context}>
         <Container />
@@ -41,7 +44,8 @@ const ReactInstaStories = function (props: ReactInstaStoriesProps) {
 ReactInstaStories.defaultProps = {
     width: 360,
     height: 640,
-    defaultInterval: 4000
+    defaultInterval: 4000,
+    autoStoryChange: true
 }
 
 export default ReactInstaStories

@@ -37,6 +37,7 @@
 		"babel-loader": "^8.0.6",
 		"css-loader": "^3.2.0",
 		"react": "^16.10.2",
+		"react-swipeable": "^5.5.1",
 		"source-map-loader": "^0.2.4",
 		"style-loader": "^1.0.0",
 		"ts-loader": "^6.0.4",
@@ -46,7 +47,8 @@
 		"webpack-dev-server": "^3.8.1"
 	},
 	"peerDependencies": {
-		"react": "^16.8.2"
+		"react": "^16.8.2",
+	  "react-swipeable": "^5.5.1"
 	},
 	"dependencies": {}
 }

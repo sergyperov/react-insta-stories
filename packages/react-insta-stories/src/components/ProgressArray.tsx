@@ -30,7 +30,7 @@ export default () => {
         setCount((count: number) => {
             const interval = getCurrentInterval()
             countCopy = count + (100 / ((interval / 1000) * 60))
-            return count + (100 / ((interval / 1000) * 60))
+            return (countCopy >= 100 && currentId !== stories.length - 1) ? 0 : countCopy
         })
         if (countCopy < 100) {
             animationFrameId.current = requestAnimationFrame(incrementCount)
@@ -64,13 +64,16 @@ export default () => {
 
     return (
         <div style={styles.progressArr}>
-            {stories.map((_, i) =>
-                <Progress
+            {stories.map((_, i) => {
+                const res = i === currentId ? 1 : (i < currentId ? 2 : 0);
+                return <Progress
                     key={i}
                     count={count}
                     width={1 / stories.length}
-                    active={i === currentId ? 1 : (i < currentId ? 2 : 0)}
-                />)}
+                    active={res}
+                />;
+            })
+            }
         </div>
     )
 }

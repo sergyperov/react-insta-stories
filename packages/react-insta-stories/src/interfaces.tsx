@@ -12,6 +12,9 @@ export interface ReactInstaStoriesProps {
     onAllStoriesEnd?: Function,
     onStoryStart?: Function,
     onStoryEnd?: Function
+    beforePrevStory?: Function,
+    beforeNextStory?: Function,
+    autoStoryChange: boolean
 }
 
 export interface GlobalCtx extends ReactInstaStoriesProps { }

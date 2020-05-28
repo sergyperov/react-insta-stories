@@ -2,7 +2,6 @@ const path = require('path');
 
 module.exports = {
     entry: './src/index.tsx',
-    devtool: 'inline-source-map',
     devServer: {
         contentBase: './dist',
     },
@@ -44,20 +43,18 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-        filename: 'index.js',
+        filename: 'react-insta-stories.js',
         path: path.resolve(__dirname, 'dist'),
-        library: 'Stories',
-        libraryTarget: 'umd',
-        umdNamedDefine: true,
-        globalObject: 'this'
+        libraryTarget: 'amd',
+        libraryExport: 'default'
     },
     externals: {
         // Don't bundle react or react-dom
         react: {
             commonjs: 'react',
             commonjs2: 'react',
-            amd: 'React',
-            root: 'React'
+            amd: 'react',
+            root: 'react'
         },
         'react-dom': {
             commonjs: 'react-dom',
