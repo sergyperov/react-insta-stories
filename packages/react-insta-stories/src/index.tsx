@@ -34,6 +34,7 @@ const ReactInstaStories = function (props: ReactInstaStoriesProps) {
         onAllStoriesEnd: props.onAllStoriesEnd,
         beforePrevStory: props.beforePrevStory,
         beforeNextStory: props.beforeNextStory,
+		onStoryClose: props.onStoryClose,
         autoStoryChange: props.autoStoryChange
     }
     return <GlobalContext.Provider value={context}>

@@ -16,7 +16,7 @@ export default function () {
     let mousedownId = useRef<NodeJS.Timeout>()
 
     const { width, height, stories, loop, currentIndex, isPaused, autoStoryChange } = useContext<GlobalCtx>(GlobalContext)
-    const {beforePrevStory, beforeNextStory} = useContext<GlobalCtx>(GlobalContext)
+    const {beforePrevStory, beforeNextStory, onStoryClose} = useContext<GlobalCtx>(GlobalContext)
 
     useEffect(() => {
         if (typeof currentIndex === 'number') {
@@ -98,7 +98,9 @@ export default function () {
                 previous()
             } else if (dir === "Left") {
                 next();
-            }
+            } else if (dir === "Down") {
+				onStoryClose && onStoryClose();
+			}
         }});
 
     return (
@@ -120,8 +122,8 @@ export default function () {
                 getVideoDuration={getVideoDuration}
             />
             <div style={styles.overlay}>
-                <div style={{ width: '50%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'previous')} />
-                <div style={{ width: '50%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'next')} />
+                <div style={{ width: '33%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'previous')} />
+                <div style={{ width: '33%', marginLeft: '34%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'next')} />
             </div>
         </div>
     )

@@ -48,7 +48,7 @@
 	},
 	"peerDependencies": {
 		"react": "^16.8.2",
-	  "react-swipeable": "^5.5.1"
+		"react-swipeable": "^5.5.1"
 	},
 	"dependencies": {}
 }

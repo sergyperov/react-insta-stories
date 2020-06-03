@@ -14,6 +14,7 @@ export interface ReactInstaStoriesProps {
     onStoryEnd?: Function
     beforePrevStory?: Function,
     beforeNextStory?: Function,
+	onStoryClose?: Function,
     autoStoryChange: boolean
 }
 
