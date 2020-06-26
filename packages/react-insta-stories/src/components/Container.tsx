@@ -79,12 +79,17 @@ export default function () {
     }
 
     const mouseUp = (e: React.MouseEvent | React.TouchEvent, type: string) => {
-        // e.preventDefault()
+        e.preventDefault();
+		e.stopPropagation();
         mousedownId.current && clearTimeout(mousedownId.current)
         if (pause) {
             toggleState('play')
         } else {
-            type === 'next' ? next() : previous()
+        	if (type === "next") {
+        		next();
+			} else if (type === "previous") {
+				previous();
+			}
         }
     }
 
@@ -123,7 +128,8 @@ export default function () {
             />
             <div style={styles.overlay}>
                 <div style={{ width: '33%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'previous')} />
-                <div style={{ width: '33%', marginLeft: '34%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'next')} />
+				<div style={{ width: '34%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, '')} />
+                <div style={{ width: '33%', zIndex: 999 }} onTouchStart={debouncePause} onTouchEnd={e => mouseUp(e, 'next')} />
             </div>
         </div>
     )
